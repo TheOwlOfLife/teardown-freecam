@@ -3,6 +3,7 @@ using WindowsInput;
 using WindowsInput.Native;
 using Squalr.Engine.Memory;
 using Squalr.Engine.OS;
+using System;
 
 namespace TeardownCameraHack
 {
@@ -59,6 +60,29 @@ namespace TeardownCameraHack
                 {
                     camera.PositionY -= cameraSpeed;
                 }
+                if (_inputSimulator.InputDeviceState.IsKeyDown(VirtualKeyCode.VK_Q))
+                {
+                    camera.PositionY += cameraSpeed;
+                }
+                if (_inputSimulator.InputDeviceState.IsKeyDown(VirtualKeyCode.LEFT))
+                {
+                    if (camera.pogger > 55)
+                    {
+                        camera.pogger -= cameraSpeed;
+                    } else
+                    {
+                        camera.pogger += cameraSpeed;
+
+                    }
+                    //camera.Rotation1 += cameraSpeed;
+                    // camera.Rotation2 = camera.Rotation1;
+                }
+                if (_inputSimulator.InputDeviceState.IsKeyDown(VirtualKeyCode.RIGHT))
+                {
+                    camera.pogger -= cameraSpeed;
+                    // camera.Rotation3 -= cameraSpeed;
+                    // camera.Rotation4 = -camera.Rotation3;
+                }
                 // ToDo: sync player with camera
                 // world.Player.PositionX = camera.PositionX;
                 // world.Player.PositionY = camera.PositionY;
@@ -70,7 +94,7 @@ namespace TeardownCameraHack
         {
             Writer.Default.WriteBytes(_teardownBaseAddress + 0x312D1, new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }); // pause camera path
             Writer.Default.WriteBytes(_teardownBaseAddress + 0x2E750, new byte[] { 0x90, 0x90, 0x90, 0x90 }); // prevent camera position assignment
-            // Writer.Default.WriteBytes(_teardownBaseAddress + 0x2E73C, new byte[] { 0x90, 0x90, 0x90, 0x90 }); // prevent camera rotation assignment
+             //Writer.Default.WriteBytes(_teardownBaseAddress + 0x2E73C, new byte[] { 0x90, 0x90, 0x90, 0x90 }); // prevent camera rotation assignment
             // Writer.Default.WriteBytes(_teardownBaseAddress + 0x2E74C, new byte[] { 0x90, 0x90, 0x90, 0x90 }); // prevent camera rotation assignment
             // Writer.Default.WriteBytes(_teardownBaseAddress + 0xC6989, new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 }); // prevent player position assignment
             // Writer.Default.WriteBytes(_teardownBaseAddress + 0xC698E, new byte[] { 0x90, 0x90, 0x90 }); // prevent player position assignment

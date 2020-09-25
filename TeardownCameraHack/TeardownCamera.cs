@@ -54,6 +54,12 @@ namespace TeardownCameraHack
             set => Writer.Default.Write(_cameraBaseAddress + 0x1D4, value);
         }
 
+        public float pogger
+        {
+            get => Reader.Default.Read<float>(_cameraBaseAddress + 0x150, out _);
+            set => Writer.Default.Write(_cameraBaseAddress + 0x150, value);
+        }
+
         public TeardownCamera(ulong teardownBaseAddress)
         {
             _cameraBaseAddress = Reader.Default.Read<ulong>(teardownBaseAddress + 0x003E2528, out _);
