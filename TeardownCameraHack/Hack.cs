@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Diagnostics;
 using System.Numerics;
 using System.Threading;
@@ -6,8 +7,11 @@ using WindowsInput;
 using WindowsInput.Native;
 using Squalr.Engine.Memory;
 using Squalr.Engine.OS;
+using TeardownCameraHack.Teardown;
 using TeardownCameraHack.Teardown.Models;
 using TeardownCameraHack.Utilities;
+using static TeardownCameraHack.Utilities.Helper;
+using System.Windows.Forms;
 
 namespace TeardownCameraHack
 {
@@ -16,17 +20,25 @@ namespace TeardownCameraHack
         private static readonly float TickRate = 1.0f / 60.0f;
         private static readonly float NormalCameraSpeed = 5.0f;
         private static readonly float FastCameraSpeed = 25.0f;
+        //private static readonly float TurnSpeed = (float)Math.PI * 0.05f;
         private static readonly float LightColorChangeAmount = 25.0f;
         private static readonly float FireSizeChangeAmount = 1.0f;
 
         private readonly InputSimulator _inputSimulator;
         private readonly ulong _teardownBaseAddress;
+        private const string windowName = "Teardown Perfomance Test";
+        private IntPtr windowsHandler { get; set; }
+        public Rectangle windowRect { get; private set; }
+        private bool WindowActive { get; set; }
 
         public Hack(Process teardownProcess)
         {
             _inputSimulator = new InputSimulator();
             _teardownBaseAddress = (ulong)teardownProcess.MainModule.BaseAddress;
             Processes.Default.OpenedProcess = teardownProcess;
+            windowsHandler = teardownProcess.MainWindowHandle;
+            WindowActive = false;
+            windowRect = Rectangle.Empty;
         }
 
         public void Start()
@@ -81,15 +93,16 @@ namespace TeardownCameraHack
             var input = new TeardownInput(Reader.Default.Read<ulong>(_teardownBaseAddress + 0x3E8E10, out _));
             var game = new TeardownGame(_teardownBaseAddress + 0x003E2528);
 
-            var lastMousePositionX = input.MouseWindowPositionX;
-            var lastMousePositionY = input.MouseWindowPositionY;
+          //  var lastMousePositionX = Cursor.Position.X;
+           // var lastMousePositionY = Cursor.Position.Y;
             var cameraRotationX = 0.0f;
             var cameraRotationY = 0.0f;
-            var lastFrameTime = 0.0f;
-
             var stopwatch = Stopwatch.StartNew();
             while (true)
             {
+                var lastMousePositionX = Cursor.Position.X;
+                var lastMousePositionY = Cursor.Position.Y;
+                WindowActive = windowsHandler == User32.GetForegroundWindow();
                 var deltaTime = stopwatch.ElapsedMilliseconds / 1000.0f;
                 if (deltaTime < TickRate)
                 {
@@ -116,12 +129,14 @@ namespace TeardownCameraHack
                 {
                     game.SimulationTime = 60.0f;
                 }
-
+                windowRect = GetWindowRectangle(windowsHandler);
+                Console.WriteLine((int)windowsHandler + " w " + (double)windowRect.Width + " h " + (double)windowRect.Height + " x " + (double)windowRect.X + " y " + (double)windowRect.Y);
+                Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
                 var shouldUseFastCameraSpeed = _inputSimulator.InputDeviceState.IsKeyDown(VirtualKeyCode.SHIFT);
                 var cameraMovementSpeed = shouldUseFastCameraSpeed ? FastCameraSpeed : NormalCameraSpeed;
                 var currentMousePositionX = input.MouseWindowPositionX;
                 var currentMousePositionY = input.MouseWindowPositionY;
-                var cameraSensitivity = game.InputSensitivity * 0.001f * (float)Math.PI;
+                var cameraSensitivity = game.Sensitivity * 0.001f * (float)Math.PI;
 
                 var location = game.Scene.Locations.Length >= 2
                     ? game.Scene.Locations[game.Scene.Locations.Length - 2]
@@ -131,8 +146,20 @@ namespace TeardownCameraHack
                     // camera rotation
                     if (_inputSimulator.InputDeviceState.IsKeyDown(VirtualKeyCode.RBUTTON))
                     {
-                        cameraRotationX += (currentMousePositionY - lastMousePositionY) * cameraSensitivity * deltaTime;
-                        cameraRotationY -= (currentMousePositionX - lastMousePositionX) * cameraSensitivity * deltaTime;
+                        Cursor.Hide();
+                        var centre = new System.Drawing.Point(windowRect.X + windowRect.Width / 2, windowRect.Y + windowRect.Height / 2);
+                        Cursor.Position = centre;
+                        var differenceX = centre.X - Cursor.Position.X;
+                        var differenceY = centre.Y - Cursor.Position.Y;
+                        //cameraRotationX += (currentMousePositionY - lastMousePositionY) * cameraSensitivity * deltaTime;
+                        //cameraRotationY -= (currentMousePositionX - lastMousePositionX) * cameraSensitivity * deltaTime;
+                        cameraRotationX -= (Cursor.Position.Y - lastMousePositionY) * cameraSensitivity * deltaTime;
+                        cameraRotationY += (Cursor.Position.X - lastMousePositionX) * cameraSensitivity * deltaTime;
+                        //cameraRotationX += differenceX * cameraSensitivity * deltaTime;
+                        //cameraRotationY -= differenceY * cameraSensitivity * deltaTime;
+                    } else
+                    {
+                        Cursor.Show();
                     }
                     location.Frame =
                         Quaternion.CreateFromAxisAngle(location.Left, cameraRotationX) *
