@@ -34,6 +34,7 @@
     <Prefer32bit>false</Prefer32bit>
   </PropertyGroup>
   <ItemGroup>
+<<<<<<< Updated upstream
     <Reference Include="Fasm.NET, Version=1.0.4939.27955, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Fasm.NET.1.70.03\lib\Fasm.NET.dll</HintPath>
       <Private>True</Private>
@@ -44,6 +45,10 @@
       <HintPath>..\packages\SharpDisasmStandard.1.0.1\lib\netstandard2.0\SharpDisasm.dll</HintPath>
       <Private>True</Private>
     </Reference>
+=======
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="mscorlib" />
+>>>>>>> Stashed changes
     <Reference Include="Squalr.Engine, Version=2.3.0.1, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Squalr.Engine.2.3.0.1\lib\netstandard2.0\Squalr.Engine.dll</HintPath>
       <Private>True</Private>
@@ -59,8 +64,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
+<<<<<<< Updated upstream
     <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
+=======
+>>>>>>> Stashed changes
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
       <HintPath>..\packages\System.Drawing.Common.4.5.0\lib\net461\System.Drawing.Common.dll</HintPath>
@@ -84,24 +92,64 @@
       <HintPath>..\packages\System.Security.Principal.Windows.4.5.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
+<<<<<<< Updated upstream
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
       <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
+=======
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad">
+      <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
+      <Private>True</Private>
+>>>>>>> Stashed changes
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+<<<<<<< Updated upstream
     <Compile Include="TeardownCamera.cs" />
     <Compile Include="TeardownHack.cs" />
     <Compile Include="TeardownPlayer.cs" />
     <Compile Include="TeardownWorld.cs" />
+=======
+    <Compile Include="Hack.cs" />
+    <Compile Include="Teardown\Models\TeardownFireSystem.cs" />
+    <Compile Include="Teardown\Models\TeardownGame.cs" />
+    <Compile Include="Teardown\Models\TeardownGameState.cs" />
+    <Compile Include="Teardown\Models\TeardownHud.cs" />
+    <Compile Include="Teardown\Models\TeardownInput.cs" />
+    <Compile Include="Teardown\Models\TeardownLight.cs" />
+    <Compile Include="Teardown\Models\TeardownLocation.cs" />
+    <Compile Include="Teardown\Models\TeardownProjectile.cs" />
+    <Compile Include="Teardown\Models\TeardownProjectileType.cs" />
+    <Compile Include="Teardown\Models\TeardownScene.cs" />
+    <Compile Include="Teardown\Models\TeardownScriptingEngine.cs" />
+    <Compile Include="Teardown\Models\TeardownSettings.cs" />
+    <Compile Include="Teardown\Models\TeardownVehicle.cs" />
+    <Compile Include="Teardown\TeardownApi.cs" />
+    <Compile Include="Utilities\AssemblyUtility.cs" />
+    <Compile Include="Utilities\Helper.cs" />
+    <Compile Include="Utilities\Kernel32.cs" />
+    <Compile Include="Utilities\MathUtility.cs" />
+    <Compile Include="Utilities\User32.cs" />
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+<<<<<<< Updated upstream
+=======
+  <ItemGroup>
+    <Content Include="Docs\disabled-patches.txt" />
+    <Content Include="Docs\structures.txt" />
+  </ItemGroup>
+>>>>>>> Stashed changes
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
