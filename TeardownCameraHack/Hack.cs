@@ -136,7 +136,7 @@ namespace TeardownCameraHack
                 var cameraMovementSpeed = shouldUseFastCameraSpeed ? FastCameraSpeed : NormalCameraSpeed;
                 var currentMousePositionX = input.MouseWindowPositionX;
                 var currentMousePositionY = input.MouseWindowPositionY;
-                var cameraSensitivity = game.Sensitivity * 0.001f * (float)Math.PI;
+                var cameraSensitivity = game.InputSensitivity * 0.001f * (float)Math.PI;
 
                 var location = game.Scene.Locations.Length >= 2
                     ? game.Scene.Locations[game.Scene.Locations.Length - 2]
